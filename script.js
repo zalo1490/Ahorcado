@@ -1,6 +1,7 @@
 const wordContainer = document.getElementById('wordContainer');
 const startButton = document.getElementById('startButton');
 const usedLettersElement = document.getElementById('usedLetters');
+const mobileInput = document.getElementById('mobileInput'); // 👈 agregado
 
 let canvas = document.getElementById('canvas');
 let ctx = canvas.getContext('2d');
@@ -66,10 +67,19 @@ const letterInput = letter => {
 
 const letterEvent = event => {
     let newLetter = event.key.toUpperCase();
-    if(newLetter.match(/^[a-zñ]$/i) && !usedLetters.includes(newLetter)) {
+    if(newLetter.match(/^[A-ZÑ]$/i) && !usedLetters.includes(newLetter)) {
         letterInput(newLetter);
     };
 };
+
+// 👇 Captura letras desde el input invisible en móvil
+mobileInput.addEventListener("input", (e) => {
+    let newLetter = e.target.value.toUpperCase();
+    e.target.value = ""; // limpiar input
+    if(newLetter.match(/^[A-ZÑ]$/i) && !usedLetters.includes(newLetter)) {
+        letterInput(newLetter);
+    }
+});
 
 const drawWord = () => {
     selectedWord.forEach(letter => {
@@ -109,6 +119,9 @@ const startGame = () => {
     selectRandomWord();
     drawWord();
     document.addEventListener('keydown', letterEvent);
+
+    // 👇 Forzar teclado en móvil
+    mobileInput.focus();
 };
 
 startButton.addEventListener('click', startGame);
