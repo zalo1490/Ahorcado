@@ -1,7 +1,7 @@
 const wordContainer = document.getElementById('wordContainer');
 const startButton = document.getElementById('startButton');
 const usedLettersElement = document.getElementById('usedLetters');
-const mobileInput = document.getElementById('mobileInput'); // 👈 agregado
+const hiddenInput = document.getElementById('hiddenInput'); // 👈 nuevo
 
 let canvas = document.getElementById('canvas');
 let ctx = canvas.getContext('2d');
@@ -72,12 +72,12 @@ const letterEvent = event => {
     };
 };
 
-// 👇 Captura letras desde el input invisible en móvil
-mobileInput.addEventListener("input", (e) => {
-    let newLetter = e.target.value.toUpperCase();
-    e.target.value = ""; // limpiar input
-    if(newLetter.match(/^[A-ZÑ]$/i) && !usedLetters.includes(newLetter)) {
-        letterInput(newLetter);
+// 👇 Captura letras desde el input oculto en móvil
+hiddenInput.addEventListener("input", (e) => {
+    const letra = e.target.value.toUpperCase();
+    e.target.value = ""; // limpiar
+    if(letra.match(/^[A-ZÑ]$/i) && !usedLetters.includes(letra)) {
+        letterInput(letra);
     }
 });
 
@@ -121,7 +121,9 @@ const startGame = () => {
     document.addEventListener('keydown', letterEvent);
 
     // 👇 Forzar teclado en móvil
-    mobileInput.focus();
+    hiddenInput.focus();
 };
+
+
 
 startButton.addEventListener('click', startGame);
