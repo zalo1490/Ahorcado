@@ -1,7 +1,7 @@
 const wordContainer = document.getElementById('wordContainer');
 const startButton = document.getElementById('startButton');
 const usedLettersElement = document.getElementById('usedLetters');
-const hiddenInput = document.getElementById('hiddenInput'); // 👈 nuevo
+const messageElement = document.getElementById('message'); // 👈 nuevo
 
 let canvas = document.getElementById('canvas');
 let ctx = canvas.getContext('2d');
@@ -36,12 +36,20 @@ const addBodyPart = bodyPart => {
 const wrongLetter = () => {
     addBodyPart(bodyParts[mistakes]);
     mistakes++;
-    if(mistakes === bodyParts.length) endGame();
+    if(mistakes === bodyParts.length) endGame(false);
 }
 
-const endGame = () => {
+const endGame = (won = false) => {
     document.removeEventListener('keydown', letterEvent);
     startButton.style.display = 'block';
+
+    if (won) {
+        messageElement.textContent = "¡Ganaste!";
+        messageElement.style.color = "limegreen";
+    } else {
+        messageElement.textContent = "Perdiste. La palabra era: " + selectedWord.join("");
+        messageElement.style.color = "#d95d39";
+    }
 }
 
 const correctLetter = letter => {
@@ -52,7 +60,7 @@ const correctLetter = letter => {
             hits++;
         }
     }
-    if(hits === selectedWord.length) endGame();
+    if(hits === selectedWord.length) endGame(true);
 }
 
 const letterInput = letter => {
@@ -67,19 +75,10 @@ const letterInput = letter => {
 
 const letterEvent = event => {
     let newLetter = event.key.toUpperCase();
-    if(newLetter.match(/^[A-ZÑ]$/i) && !usedLetters.includes(newLetter)) {
+    if(newLetter.match(/^[a-zñ]$/i) && !usedLetters.includes(newLetter)) {
         letterInput(newLetter);
     };
 };
-
-// 👇 Captura letras desde el input oculto en móvil
-hiddenInput.addEventListener("input", (e) => {
-    const letra = e.target.value.toUpperCase();
-    e.target.value = ""; // limpiar
-    if(letra.match(/^[A-ZÑ]$/i) && !usedLetters.includes(letra)) {
-        letterInput(letra);
-    }
-});
 
 const drawWord = () => {
     selectedWord.forEach(letter => {
@@ -114,16 +113,12 @@ const startGame = () => {
     hits = 0;
     wordContainer.innerHTML = '';
     usedLettersElement.innerHTML = '';
+    messageElement.textContent = ''; // 👈 limpiar mensaje
     startButton.style.display = 'none';
     drawHangMan();
     selectRandomWord();
     drawWord();
     document.addEventListener('keydown', letterEvent);
-
-    // 👇 Forzar teclado en móvil
-    hiddenInput.focus();
 };
-
-
 
 startButton.addEventListener('click', startGame);
