@@ -47,8 +47,17 @@ body {
     border-radius: 4px;
     cursor: pointer;
 }
+
 #hiddenInput {
     opacity: 0;
     position: absolute;
     left: -9999px;
+}
+
+#message {
+    margin-top: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #d95d39;
+    text-align: center;
 }
