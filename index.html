@@ -7,9 +7,6 @@
     <title>Ahorcado</title>
     <link href="http://fonts.cdnfonts.com/css/sf-pixelate" rel="stylesheet">
     <link rel="stylesheet" href="styles.css" >
-    
-<input id="mobileInput" type="text" maxlength="1" style="opacity:0; position:absolute; left:-1000px;">
-
     <script type="text/javascript" src="palabras.js" defer></script>
     <script type="text/javascript" src="script.js" defer></script>
 </head>
@@ -21,6 +18,8 @@
     </div>
     <div id="usedLetters"></div>
     <div id="wordContainer"></div>
+    <input id="hiddenInput" type="text" maxlength="1" autocomplete="off">
+
     <button id="startButton">START</button>
 </body>
 </html>
