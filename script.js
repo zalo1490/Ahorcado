@@ -1,7 +1,8 @@
 const wordContainer = document.getElementById('wordContainer');
 const startButton = document.getElementById('startButton');
 const usedLettersElement = document.getElementById('usedLetters');
-const messageElement = document.getElementById('message'); // 👈 nuevo
+const messageElement = document.getElementById('message');
+const hiddenInput = document.getElementById('hiddenInput');
 
 let canvas = document.getElementById('canvas');
 let ctx = canvas.getContext('2d');
@@ -41,6 +42,7 @@ const wrongLetter = () => {
 
 const endGame = (won = false) => {
     document.removeEventListener('keydown', letterEvent);
+    hiddenInput.blur(); // 👈 cerramos teclado en móvil
     startButton.style.display = 'block';
 
     if (won) {
@@ -75,10 +77,19 @@ const letterInput = letter => {
 
 const letterEvent = event => {
     let newLetter = event.key.toUpperCase();
-    if(newLetter.match(/^[a-zñ]$/i) && !usedLetters.includes(newLetter)) {
+    if(newLetter.match(/^[A-ZÑ]$/i) && !usedLetters.includes(newLetter)) {
         letterInput(newLetter);
     };
 };
+
+// 👇 Captura letras del input oculto en móvil
+hiddenInput.addEventListener("input", (e) => {
+    const letra = e.target.value.toUpperCase();
+    e.target.value = "";
+    if(letra.match(/^[A-ZÑ]$/i) && !usedLetters.includes(letra)) {
+        letterInput(letra);
+    }
+});
 
 const drawWord = () => {
     selectedWord.forEach(letter => {
@@ -113,12 +124,13 @@ const startGame = () => {
     hits = 0;
     wordContainer.innerHTML = '';
     usedLettersElement.innerHTML = '';
-    messageElement.textContent = ''; // 👈 limpiar mensaje
+    messageElement.textContent = '';
     startButton.style.display = 'none';
     drawHangMan();
     selectRandomWord();
     drawWord();
     document.addEventListener('keydown', letterEvent);
+    hiddenInput.focus(); // 👈 abre teclado en móvil
 };
 
 startButton.addEventListener('click', startGame);
